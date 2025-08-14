@@ -11,7 +11,7 @@ export default function SearchBar({ value, onChangeText, placeholder = "Search" 
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/images/search.png")} // Adicione um ícone de lupa nesta pasta
+        source={require("../assets/images/search.png")} // Adicione um ícone de lupa nesta pasta
         style={styles.icon}
       />
       <TextInput

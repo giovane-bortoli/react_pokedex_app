@@ -1,8 +1,9 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import PokemonCard from "./components/pokemonCard";
-import SearchBar from "./components/searchBar";
-import SortButton from "./components/sortButton";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import PokemonCard from "../components/pokemonCard";
+import SearchBar from "../components/searchBar";
+import SortButton from "../components/sortButton";
 
 const mockPokemons = [
   { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
@@ -19,6 +20,8 @@ const mockPokemons = [
 export default function Index() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("number" as "number" | "name");
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -27,8 +30,24 @@ export default function Index() {
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.grid}>
-          {mockPokemons.map((p, i) => (
-            <PokemonCard key={i} name={p.name} number={p.number} image={p.image} />
+          {mockPokemons.map((pokemon, i) => (
+            <TouchableOpacity
+              key={i}
+              activeOpacity={0.8}
+              style={styles.gridItem}
+              onPress={() =>
+                router.push({
+                  pathname: "/pokemon_details",
+                  params: {
+                    name: pokemon.name,
+                    number: pokemon.number,
+                    // Se quiser passar a imagem, pode passar o nome do arquivo ou um id
+                  },
+                })
+              }
+            >
+              <PokemonCard name={pokemon.name} number={pokemon.number} image={pokemon.image} />
+            </TouchableOpacity>
           ))}
         </View>
       </View>
@@ -60,5 +79,9 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     padding: 8,
+  },
+  gridItem: {
+    width: "32%",
+    marginBottom: 12,
   },
 });

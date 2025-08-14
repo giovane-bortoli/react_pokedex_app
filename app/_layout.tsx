@@ -1,36 +1,36 @@
 import { Stack } from "expo-router";
-import { Image, StyleSheet } from "react-native";
+import { Image, Text, View } from "react-native";
 
 const pokeballImage = require("../assets/images/pokeball.png");
+
 export default function RootLayout() {
   return (
     <Stack
       screenOptions={{
-        headerTitle: "Pokédex",
         headerShadowVisible: false,
         headerStyle: { backgroundColor: "#DC0A2D" },
-        headerTitleStyle: styles.headerTitle,
         statusBarStyle: "light",
         statusBarHidden: true,
-        headerLeft: () => <Image source={pokeballImage} style={styles.headerImage} resizeMode="contain" />,
       }}
     >
-      <Stack.Screen name="index" options={{ headerShadowVisible: false }} />
+      <Stack.Screen
+        name="index"
+        options={{
+          headerTitle: () => (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Image source={pokeballImage} style={{ width: 32, height: 32, tintColor: "white", marginRight: 8 }} />
+              <Text style={{ color: "white", fontWeight: "bold", fontSize: 24 }}>Pokédex</Text>
+            </View>
+          ),
+          headerLeft: () => null,
+        }}
+      />
+      <Stack.Screen
+        name="pokemon_details"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
-
-const styles = StyleSheet.create({
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-  },
-  headerImage: {
-    width: 32,
-    height: 32,
-    marginLeft: 12,
-    marginRight: 16,
-    tintColor: "white",
-  },
-});

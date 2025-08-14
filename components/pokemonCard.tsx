@@ -21,11 +21,10 @@ export default function PokemonCard({ name, number, image }: PokemonCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
+    width: "100%",
     backgroundColor: "#F6F7F9",
     borderRadius: 16,
     alignItems: "center",
-    margin: 8,
     paddingVertical: 12,
     elevation: 2,
     shadowColor: "#000",

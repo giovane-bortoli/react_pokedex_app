@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const tag = require("../../assets/images/tag.png");
-const text_format = require("../../assets/images/text_format.png");
+const tag = require("../assets/images/tag.png");
+const text_format = require("../assets/images/text_format.png");
 
 type SortButtonProps = {
   value: "number" | "name";
