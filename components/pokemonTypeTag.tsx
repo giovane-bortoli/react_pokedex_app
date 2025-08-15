@@ -1,19 +1,22 @@
 import { StyleSheet, Text, View } from "react-native";
 
 type TypeTagProps = {
-  label: string;
+  types: { type: { name: string } }[]; // Atualizado para aceitar uma lista de tipos
   color: string;
 };
 
-export default function TypeTag({ label, color }: TypeTagProps) {
+export default function TypeTag({ types, color }: TypeTagProps) {
   return (
     <View style={styles.typeRow}>
-      <View style={[styles.typeTag, { backgroundColor: color }]}>
-        <Text style={styles.typeTagText}>{label}</Text>
-      </View>
+      {types.map((type, index) => (
+        <View key={index} style={[styles.typeTag, { backgroundColor: color }]}>
+          <Text style={styles.typeTagText}>{type.type.name}</Text>
+        </View>
+      ))}
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   typeRow: {
     flexDirection: "row",

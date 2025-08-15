@@ -6,66 +6,63 @@ import React from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function PokemonDetails() {
-  const { name = "Charmander", number = "#004" } = useLocalSearchParams();
+  const { pokemon } = useLocalSearchParams();
   const router = useRouter();
-  const data = {
-    name: name as string,
-    number: number as string,
-    color: "#F57D31",
-    image: require("../assets/images/Charmander.png"),
-    types: [{ label: "Fire", color: "#F57D31" }],
-    weight: "8,5 kg",
-    height: "0,6 m",
-    moves: ["Mega-Punch", "Fire-Punch"],
-    description: "It has a preference for hot things. When it rains, steam is said to spout from the tip of its tail.",
-    stats: [
-      { label: "HP", value: 39, color: "#F57D31" },
-      { label: "ATK", value: 52, color: "#F57D31" },
-      { label: "DEF", value: 43, color: "#F57D31" },
-      { label: "SATK", value: 60, color: "#F57D31" },
-      { label: "SDEF", value: 50, color: "#F57D31" },
-      { label: "SPD", value: 65, color: "#F57D31" },
-    ],
-  };
+
+  if (!pokemon) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error: Pokémon data not found.</Text>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <Text style={{ color: "white", fontSize: 18 }}>Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const parsedPokemon = JSON.parse(pokemon as string);
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: data.color }}>
-      <View style={[styles.header, { backgroundColor: data.color }]}>
+    <ScrollView style={{ flex: 1, backgroundColor: parsedPokemon.color }}>
+      <View style={[styles.header, { backgroundColor: parsedPokemon.color }]}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={28} color="white" />
         </TouchableOpacity>
         <View>
-          <Text style={styles.headerName}>{data.name}</Text>
+          <Text style={styles.headerName}>{parsedPokemon.name}</Text>
         </View>
-        <Text style={styles.headerNumber}>{data.number}</Text>
+        <Text style={styles.headerNumber}>{`#${parsedPokemon.id.toString().padStart(3, "0")}`}</Text>
       </View>
       <Image source={require("../assets/images/pokeball.png")} style={styles.pokeballBg} resizeMode="contain" />
-      <Image source={data.image} style={styles.pokemonImage} />
+      <Image source={{ uri: parsedPokemon.image }} style={styles.pokemonImage} />
       <View style={styles.detailsContainer}>
-        <PokemonTypeTag label={data.types[0].label} color={data.types[0].color} />
+        <PokemonTypeTag types={parsedPokemon.type} color={parsedPokemon.color} />
 
         <Text style={styles.sectionTitle}>About</Text>
         <View style={styles.aboutRow}>
           <View style={styles.aboutItem}>
-            <Text style={styles.aboutValue}>{data.weight}</Text>
+            <Text style={styles.aboutValue}>{parsedPokemon.weight}</Text>
             <Text style={styles.aboutLabel}>Weight</Text>
           </View>
           <View style={styles.aboutItem}>
-            <Text style={styles.aboutValue}>{data.height}</Text>
+            <Text style={styles.aboutValue}>{parsedPokemon.height}</Text>
             <Text style={styles.aboutLabel}>Height</Text>
           </View>
           <View style={styles.aboutItem}>
-            <Text style={styles.aboutValue}>{data.moves.join("\n")}</Text>
+            <Text style={styles.aboutValue}>{""}</Text>
             <Text style={styles.aboutLabel}>Moves</Text>
           </View>
         </View>
-        <Text style={styles.description}>{data.description}</Text>
+        <Text style={styles.description}>{parsedPokemon.description}</Text>
         <View style={styles.statsContainer}>
           <Text style={styles.sectionTitle}>Base Stats</Text>
           <View>
-            {data.stats.map((stat) => (
-              <PokemonStatsBar key={stat.label} label={stat.label} value={stat.value} color={stat.color} />
-            ))}
+            <PokemonStatsBar
+              key={parsedPokemon.name}
+              label={parsedPokemon.name}
+              value={parsedPokemon.base_stat}
+              color={parsedPokemon.color}
+            />
           </View>
         </View>
       </View>
@@ -81,6 +78,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#DC0A2D",
+  },
+  errorText: {
+    color: "white",
+    fontSize: 18,
+    marginBottom: 16,
   },
 
   backButton: {

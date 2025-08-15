@@ -1,26 +1,21 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import PokemonCard from "../components/pokemonCard";
 import SearchBar from "../components/searchBar";
 import SortButton from "../components/sortButton";
-
-const mockPokemons = [
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-  { name: "Charmander", number: "#004", image: require("../assets/images/Charmander.png") },
-];
+import { usePokemonList } from "../hooks/usePokemonList";
 
 export default function Index() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("number" as "number" | "name");
   const router = useRouter();
+
+  const { data: pokemons, isLoading, error } = usePokemonList();
+
+  if (isLoading) return <ActivityIndicator />;
+  if (error) return <Text>Error loading Pokémon data</Text>;
 
   return (
     <View style={styles.container}>
@@ -29,27 +24,33 @@ export default function Index() {
         <SortButton value={sort} onChange={setSort} />
       </View>
       <View style={styles.bodyContainer}>
-        <View style={styles.grid}>
-          {mockPokemons.map((pokemon, i) => (
+        <FlatList
+          data={pokemons}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={3}
+          contentContainerStyle={styles.grid}
+          renderItem={({ item: pokemon }) => (
             <TouchableOpacity
-              key={i}
+              key={pokemon.id}
               activeOpacity={0.8}
               style={styles.gridItem}
               onPress={() =>
                 router.push({
                   pathname: "/pokemon_details",
                   params: {
-                    name: pokemon.name,
-                    number: pokemon.number,
-                    // Se quiser passar a imagem, pode passar o nome do arquivo ou um id
+                    pokemon: JSON.stringify(pokemon),
                   },
                 })
               }
             >
-              <PokemonCard name={pokemon.name} number={pokemon.number} image={pokemon.image} />
+              <PokemonCard
+                name={pokemon.name}
+                number={`#${String(pokemon.id).padStart(3, "0")}`}
+                image={pokemon.image}
+              />
             </TouchableOpacity>
-          ))}
-        </View>
+          )}
+        />
       </View>
     </View>
   );
@@ -62,6 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#DC0A2D",
   },
   row: {
+    marginBottom: 16,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -69,19 +71,23 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     width: "95%",
+
     marginTop: 24,
     marginBottom: 8,
     backgroundColor: "#FFFFFF",
     borderRadius: 16,
+    padding: 8,
   },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    padding: 8,
+    gap: 12,
   },
   gridItem: {
-    width: "32%",
+    flexBasis: "33%",
     marginBottom: 12,
+    paddingHorizontal: 4,
+    alignItems: "center",
   },
 });

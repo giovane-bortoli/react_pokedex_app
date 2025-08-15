@@ -12,7 +12,7 @@ export default function PokemonCard({ name, number, image }: PokemonCardProps) {
     <View style={styles.card}>
       <Text style={styles.number}>{number}</Text>
       <View style={styles.ground} />
-      <Image source={image} style={styles.image} resizeMode="contain" />
+      <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
 
       <Text style={styles.name}>{name}</Text>
     </View>

@@ -4,7 +4,7 @@ export default function StatBar({ label, value, color }: { label: string; value:
   return (
     <View style={styles.statRow}>
       <Text style={[styles.statLabel, { color }]}>{label}</Text>
-      <Text style={[styles.statValue, { color }]}>{value.toString().padStart(3, "0")}</Text>
+      <Text style={[styles.statValue, { color }]}>{value}</Text>
       <View style={styles.statBarBg}>
         <View style={[styles.statBarFill, { width: `${value / 1.5}%`, backgroundColor: color }]} />
       </View>
