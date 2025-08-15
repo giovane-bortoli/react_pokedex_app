@@ -1,12 +1,18 @@
+import { TYPE_COLORS } from "@/styles/pokemonTypeColors";
 import httpClient from "./http";
 import { Pokemon } from "./models/pokemon";
 
-export async function fetchPokemonList(): Promise<Pokemon[]> {
+type FetchPokemonListResult = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Pokemon[];
+};
+
+export async function fetchPokemonList(offset = 0, limit = 20): Promise<FetchPokemonListResult> {
   try {
-    // Faz a requisição inicial para obter a lista de Pokémon
-    const response = await httpClient.get("/pokemon");
-    console.log("API Response Data:", response.data);
-    const results = response.data.results;
+    const response = await httpClient.get(`/pokemon?offset=${offset}&limit=${limit}`);
+    const { results, count, next, previous } = response.data;
 
     if (!results) {
       throw new Error("Results not found in API response");
@@ -29,7 +35,6 @@ export async function fetchPokemonList(): Promise<Pokemon[]> {
       results.map(async (pokemon: { name: string; url: string }) => {
         const detailResponse = await httpClient.get(pokemon.url);
         const detailData = detailResponse.data;
-        console.log("Details data:", detailData);
 
         const pokemonColor = colorDetails.find((color) =>
           color.pokemon_species.some((species: { name: string }) => species.name === pokemon.name)
@@ -50,17 +55,27 @@ export async function fetchPokemonList(): Promise<Pokemon[]> {
           type: detailData.types.map((type: any) => ({
             type: {
               name: type.type.name,
+              color: TYPE_COLORS[type.type.name] || "#AAA67F",
+            },
+          })),
+          moves: detailData.moves.map((move: any) => ({
+            move: {
+              name: move.move.name,
             },
           })),
           image: detailData.sprites.front_default,
           color: pokemonColor ? pokemonColor.name : "unknown",
         } as Pokemon;
-        console.log("Mapped Pokémon:", JSON.stringify(mappedPokemon, null, 2));
         return mappedPokemon;
       })
     );
 
-    return pokemonDetails;
+    return {
+      count,
+      next,
+      previous,
+      results: pokemonDetails,
+    };
   } catch (error) {
     console.error("Error fetching Pokémon list:", error);
     throw error;

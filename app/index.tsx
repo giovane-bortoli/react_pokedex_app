@@ -12,7 +12,9 @@ export default function Index() {
   const [sort, setSort] = useState("number" as "number" | "name");
   const router = useRouter();
 
-  const { data: pokemons, isLoading, error } = usePokemonList();
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = usePokemonList();
+
+  const pokemons = data?.pages.flatMap((page) => page.results) || [];
 
   if (isLoading) return <ActivityIndicator />;
   if (error) return <Text>Error loading Pokémon data</Text>;
@@ -50,6 +52,11 @@ export default function Index() {
               />
             </TouchableOpacity>
           )}
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+          }}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
         />
       </View>
     </View>

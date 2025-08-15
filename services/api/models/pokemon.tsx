@@ -5,9 +5,16 @@ type PokemonStats = {
     name: string;
   };
 };
+type PokemonMoves = {
+  moves: string;
+  move: {
+    name: string;
+  };
+};
 
 type PokemonType = {
   type: {
+    color: string;
     name: string;
   };
 };
@@ -26,6 +33,7 @@ export interface Pokemon {
   weight: number;
   stats: PokemonStats[];
   type: PokemonType[];
+  moves: PokemonMoves[];
   image: string;
   color: PokemonColorBasedOnSpecie[];
 }

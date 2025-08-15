@@ -1,4 +1,5 @@
-import PokemonStatsBar from "@/components/pokemonStatsBar";
+import PokemonAbout from "@/components/pokemonAbout";
+import StatsBar from "@/components/pokemonStatsBar";
 import PokemonTypeTag from "@/components/pokemonTypeTag";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -9,7 +10,7 @@ export default function PokemonDetails() {
   const { pokemon } = useLocalSearchParams();
   const router = useRouter();
 
-  if (!pokemon) {
+  if (pokemon === null) {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Error: Pokémon data not found.</Text>
@@ -36,33 +37,14 @@ export default function PokemonDetails() {
       <Image source={require("../assets/images/pokeball.png")} style={styles.pokeballBg} resizeMode="contain" />
       <Image source={{ uri: parsedPokemon.image }} style={styles.pokemonImage} />
       <View style={styles.detailsContainer}>
-        <PokemonTypeTag types={parsedPokemon.type} color={parsedPokemon.color} />
-
+        <PokemonTypeTag types={parsedPokemon.type} color={parsedPokemon.type.color} />
         <Text style={styles.sectionTitle}>About</Text>
-        <View style={styles.aboutRow}>
-          <View style={styles.aboutItem}>
-            <Text style={styles.aboutValue}>{parsedPokemon.weight}</Text>
-            <Text style={styles.aboutLabel}>Weight</Text>
-          </View>
-          <View style={styles.aboutItem}>
-            <Text style={styles.aboutValue}>{parsedPokemon.height}</Text>
-            <Text style={styles.aboutLabel}>Height</Text>
-          </View>
-          <View style={styles.aboutItem}>
-            <Text style={styles.aboutValue}>{""}</Text>
-            <Text style={styles.aboutLabel}>Moves</Text>
-          </View>
-        </View>
-        <Text style={styles.description}>{parsedPokemon.description}</Text>
+        <PokemonAbout weight={parsedPokemon.weight} height={parsedPokemon.height} moves={parsedPokemon.moves} />
+        <Text style={styles.description}>testestestestetestestestestetestestestestetestestestestetestestesteste</Text>
         <View style={styles.statsContainer}>
           <Text style={styles.sectionTitle}>Base Stats</Text>
           <View>
-            <PokemonStatsBar
-              key={parsedPokemon.name}
-              label={parsedPokemon.name}
-              value={parsedPokemon.base_stat}
-              color={parsedPokemon.color}
-            />
+            <StatsBar stats={parsedPokemon.stats} color={parsedPokemon.color} />
           </View>
         </View>
       </View>
@@ -72,12 +54,18 @@ export default function PokemonDetails() {
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 48,
+    paddingTop: 10,
     paddingHorizontal: 16,
     height: 110,
     alignItems: "center",
     justifyContent: "center",
     position: "relative",
+  },
+  divider: {
+    width: 2,
+    height: "100%",
+    backgroundColor: "#ECECEC",
+    marginHorizontal: 8,
   },
   errorContainer: {
     flex: 1,
@@ -94,17 +82,16 @@ const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
     left: 12,
-    top: 52,
+
     padding: 6,
   },
 
   headerNumber: {
     position: "absolute",
     right: 12,
-    top: 60,
+
     color: "#FFF",
     fontSize: 16,
-    fontWeight: "bold",
   },
   headerName: {
     color: "#FFF",
@@ -129,15 +116,15 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     alignSelf: "center",
-    marginTop: 120,
+    marginTop: 100,
     zIndex: 2,
   },
   detailsContainer: {
     backgroundColor: "#FFF",
-    borderRadius: 16,
+    borderRadius: 24,
     marginHorizontal: 16,
     padding: 24,
-    marginTop: -70,
+    marginTop: -80,
     flexDirection: "column",
   },
 
@@ -150,26 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
   },
-  aboutRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 12,
-  },
-  aboutItem: {
-    alignItems: "center",
-    flex: 1,
-  },
-  aboutValue: {
-    color: "#222",
-    fontWeight: "bold",
-    fontSize: 16,
-    marginBottom: 2,
-  },
-  aboutLabel: {
-    color: "#A1A1A1",
-    fontSize: 12,
-    alignItems: "center",
-  },
+
   description: {
     color: "#222",
     fontSize: 14,
@@ -177,7 +145,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   statsContainer: {
-    flex: 1,
     marginTop: 0,
   },
 });
