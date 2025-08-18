@@ -1,4 +1,5 @@
 import PokemonMovesList from "@/components/pokemonMovesList";
+import { FONTS } from "@/styles/theme";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -67,10 +68,12 @@ const styles = StyleSheet.create({
     color: "#222",
     fontSize: 13,
     marginLeft: 2,
+    fontFamily: FONTS.regular,
   },
   aboutValue: {
     color: "#222",
     fontSize: 16,
+    fontFamily: FONTS.regular,
   },
   aboutLabelSpace: {
     paddingTop: 10,
@@ -79,6 +82,7 @@ const styles = StyleSheet.create({
     color: "#A1A1A1",
     fontSize: 12,
     paddingTop: 10,
+    fontFamily: FONTS.regular,
   },
   divider: {
     width: 2,

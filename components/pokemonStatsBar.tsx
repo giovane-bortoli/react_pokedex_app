@@ -1,3 +1,4 @@
+import { FONTS } from "@/styles/theme";
 import { StyleSheet, Text, View } from "react-native";
 
 type StatsBarProps = {
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
     width: 30,
     fontWeight: "bold",
     fontSize: 13,
+    fontFamily: FONTS.regular,
   },
   statValue: {
     width: 40,

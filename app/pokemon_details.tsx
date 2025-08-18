@@ -1,6 +1,7 @@
 import PokemonAbout from "@/components/pokemonAbout";
 import StatsBar from "@/components/pokemonStatsBar";
 import PokemonTypeTag from "@/components/pokemonTypeTag";
+import { FONTS } from "@/styles/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     marginBottom: 16,
+    fontFamily: FONTS.regular,
   },
 
   backButton: {
@@ -99,6 +101,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingRight: 150,
     paddingBottom: 16,
+    fontFamily: FONTS.regular,
   },
 
   pokeballBg: {
@@ -136,6 +139,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     justifyContent: "center",
     textAlign: "center",
+    fontFamily: FONTS.regular,
   },
 
   description: {
@@ -143,6 +147,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginVertical: 12,
     textAlign: "left",
+    fontFamily: FONTS.regular,
   },
   statsContainer: {
     marginTop: 0,

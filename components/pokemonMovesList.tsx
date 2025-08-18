@@ -1,3 +1,4 @@
+import { FONTS } from "@/styles/theme";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -20,6 +21,7 @@ export default function PokemonMovesList({ moves }: MovesListProps) {
 const styles = StyleSheet.create({
   moveText: {
     fontSize: 16,
+    fontFamily: FONTS.regular,
     color: "#222",
     textTransform: "capitalize",
   },

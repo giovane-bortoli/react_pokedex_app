@@ -1,7 +1,7 @@
+import CustomLoadingComponent from "@/components/customLoadingComponent";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import PokemonCard from "../components/pokemonCard";
 import SearchBar from "../components/searchBar";
 import SortButton from "../components/sortButton";
@@ -10,24 +10,42 @@ import { usePokemonList } from "../hooks/usePokemonList";
 export default function Index() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("number" as "number" | "name");
+  const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
 
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = usePokemonList();
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = usePokemonList();
 
   const pokemons = data?.pages.flatMap((page) => page.results) || [];
 
-  if (isLoading) return <ActivityIndicator />;
+  const filteredPokemons = pokemons.filter((pokemon) => {
+    if (!search) return true;
+    if (sort === "number") {
+      return pokemon.id.toString().includes(search.replace(/\D/g, ""));
+    } else {
+      return pokemon.name.toLowerCase().includes(search.toLowerCase());
+    }
+  });
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
+
+  if (isLoading) return <CustomLoadingComponent />;
   if (error) return <Text>Error loading Pokémon data</Text>;
 
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <SearchBar value={search} onChangeText={setSearch} />
+        <SearchBar value={search} onChangeText={setSearch} mode={sort} />
         <SortButton value={sort} onChange={setSort} />
       </View>
       <View style={styles.bodyContainer}>
         <FlatList
-          data={pokemons}
+          data={filteredPokemons}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
           keyExtractor={(item) => item.id.toString()}
           numColumns={3}
           contentContainerStyle={styles.grid}
@@ -56,7 +74,15 @@ export default function Index() {
             if (hasNextPage && !isFetchingNextPage) fetchNextPage();
           }}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
+          ListFooterComponent={isFetchingNextPage ? <CustomLoadingComponent size="small" /> : null}
+          ListFooterComponentStyle={{
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingVertical: 16,
+            flexDirection: "column",
+            display: "flex",
+          }}
         />
       </View>
     </View>
@@ -96,5 +122,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 4,
     alignItems: "center",
+  },
+  footerLoading: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 16,
   },
 });

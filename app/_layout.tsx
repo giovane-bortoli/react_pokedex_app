@@ -1,15 +1,26 @@
+import CustomSplashScreen from "@/components/customSplashScreen";
 import ReactQueryProvider from "@/services/reactQuery/reactQueryProvider";
 import { Stack } from "expo-router";
+import { useCallback, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const pokeballImage = require("../assets/images/pokeball.png");
 
 export default function RootLayout() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  const handleSplashFinish = useCallback(() => setShowSplash(false), []);
+
+  if (showSplash) {
+    return <CustomSplashScreen onFinish={handleSplashFinish} />;
+  }
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <ReactQueryProvider>
         <Stack
+          initialRouteName="login"
           screenOptions={{
             headerShadowVisible: false,
             headerStyle: { backgroundColor: "#DC0A2D" },
@@ -17,6 +28,12 @@ export default function RootLayout() {
             statusBarHidden: true,
           }}
         >
+          <Stack.Screen
+            name="login"
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="index"
             options={{

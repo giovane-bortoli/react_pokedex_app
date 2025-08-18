@@ -1,3 +1,4 @@
+import { FONTS } from "@/styles/theme";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginRight: 8,
     marginBottom: 4,
+    fontFamily: FONTS.regular,
   },
   image: {
     width: 64,
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#222",
     marginTop: 4,
+    fontFamily: FONTS.regular,
   },
   ground: {
     position: "absolute",

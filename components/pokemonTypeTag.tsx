@@ -1,3 +1,4 @@
+import { FONTS } from "@/styles/theme";
 import { StyleSheet, Text, View } from "react-native";
 
 type TypeTagProps = {
@@ -35,5 +36,6 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontWeight: "bold",
     fontSize: 14,
+    fontFamily: FONTS.regular,
   },
 });

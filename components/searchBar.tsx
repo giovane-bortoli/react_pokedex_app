@@ -1,24 +1,33 @@
+import { FONTS } from "@/styles/theme";
 import React from "react";
 import { Image, StyleSheet, TextInput, View } from "react-native";
 
 type SearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
-  placeholder?: string;
+
+  mode: "name" | "number";
 };
 
-export default function SearchBar({ value, onChangeText, placeholder = "Search" }: SearchBarProps) {
+export default function SearchBar({ value, onChangeText, mode }: SearchBarProps) {
+  const handleChange = (text: string) => {
+    if (mode === "number") {
+      onChangeText(text.replace(/\D/g, ""));
+    } else {
+      onChangeText(text.replace(/[^a-zA-Z]/g, ""));
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/images/search.png")} // Adicione um ícone de lupa nesta pasta
-        style={styles.icon}
-      />
+      <Image source={require("../assets/images/search.png")} style={styles.icon} />
       <TextInput
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
-        placeholder={placeholder}
+        placeholder={mode === "number" ? "Search by number" : "Search by name"}
+        keyboardType={mode === "number" ? "numeric" : "default"}
+        autoCapitalize="none"
         placeholderTextColor="#BDBDBD"
       />
     </View>
@@ -50,5 +59,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: "#333",
+    fontFamily: FONTS.regular,
   },
 });

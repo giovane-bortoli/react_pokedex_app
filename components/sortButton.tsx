@@ -1,3 +1,4 @@
+import { FONTS } from "@/styles/theme";
 import React, { useState } from "react";
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     color: "#DC0A2D",
     fontWeight: "bold",
     fontSize: 16,
+    fontFamily: FONTS.regular,
   },
   overlay: {
     flex: 1,
@@ -99,6 +101,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     marginBottom: 16,
+    fontFamily: FONTS.regular,
   },
   option: {
     flexDirection: "row",
@@ -109,6 +112,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 16,
     marginLeft: 8,
+    fontFamily: FONTS.regular,
   },
   radioCircle: {
     height: 22,
