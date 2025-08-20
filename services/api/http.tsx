@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const httpClient = axios.create({
-  baseURL: "https://pokeapi.co/api/v2",
+  baseURL: process.env.EXPO_BASE_URL,
   timeout: 10000,
 });
 

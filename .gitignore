@@ -8,8 +8,11 @@ node_modules/
 dist/
 web-build/
 expo-env.d.ts
+.env*.local
 
 # Native
+ anroid/
+ ios/
 .kotlin/
 *.orig.*
 *.jks
